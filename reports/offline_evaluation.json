@@ -1,0 +1,39 @@
+{
+  "generated_at_utc": "2026-08-11T11:23:33.870895+00:00",
+  "n_products_in_model": 3173,
+  "top_k": 3,
+  "constraint_satisfaction_rate": 1.0,
+  "n_recommendation_pairs_checked": 9512,
+  "average_cosine_similarity": 0.9204113568155758,
+  "average_taste_match_pct": 92.04113568155758,
+  "average_abv_reduction": 1.398713204373423,
+  "average_abv_reduction_pct": 20.358916837400283,
+  "average_alcohol_ml_reduction": 5.245174516400336,
+  "average_alcohol_ml_reduction_pct": 20.358916837400287,
+  "recommendation_coverage": 0.9996848408446265,
+  "no_recommendation_rate": 0.0003151591553734636,
+  "n_with_at_least_one_recommendation": 3172,
+  "n_with_no_recommendation": 1,
+  "self_recommendation_count": 0,
+  "no_recommendation_reasons": {
+    "NO_CANDIDATES": 1
+  },
+  "model_metadata": {
+    "dataset_version": "raw-2026-08-11",
+    "feature_names": [
+      "astringency",
+      "body",
+      "bitter",
+      "sweet",
+      "sour",
+      "salty",
+      "fruits",
+      "hoppy",
+      "spices",
+      "malty"
+    ],
+    "metric": "cosine",
+    "constraint_primary": "alcohol_ml",
+    "created_at_utc": "2026-08-11T11:23:20.160096+00:00"
+  }
+}

@@ -1,0 +1,43 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: sipmate
+      POSTGRES_PASSWORD: sipmate
+      POSTGRES_DB: sipmate
+    ports:
+      - "5432:5432"
+    volumes:
+      - sipmate_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sipmate -d sipmate"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+    environment:
+      DATABASE_URL: postgresql+psycopg://sipmate:sipmate@db:5432/sipmate
+      SECRET_KEY: dev-only-change-me
+      COOKIE_SECURE: "false"
+      CORS_ORIGINS: http://localhost:5173,http://127.0.0.1:5173,http://localhost:8000
+      ADMIN_EMAIL: admin@sipmate.example
+      ADMIN_PASSWORD: change-me-admin-password
+      STORAGE_BACKEND: local
+      LOCAL_UPLOAD_DIR: /app/uploads
+      FRONTEND_DIST: frontend/dist
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./uploads:/app/uploads
+      - ./models:/app/models
+      - ./data:/app/data
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  sipmate_pgdata:

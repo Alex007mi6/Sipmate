@@ -1,0 +1,92 @@
+{
+  "generated_at_utc": "2026-08-11T11:20:27.331917+00:00",
+  "raw_path": "data/raw/beer_profile_and_ratings.csv",
+  "output_path": "data/processed/products_cleaned.csv",
+  "n_raw_rows": 3197,
+  "n_cleaned_rows": 3197,
+  "n_recommendable": 3173,
+  "n_excluded_from_recommendation": 24,
+  "duplicate_analysis": {
+    "exact_row_duplicates": 0,
+    "name_only_duplicates": 131,
+    "brewery_plus_name_duplicates": 0,
+    "full_name_duplicates": 0,
+    "action": "Kept all rows. Short Name collisions are different brewery products. Natural key is full_name (Beer Name (Full))."
+  },
+  "missing_values": {
+    "raw_null_counts": {
+      "Name": 0,
+      "Style": 0,
+      "Brewery": 0,
+      "Beer Name (Full)": 0,
+      "Description": 0,
+      "ABV": 0,
+      "Min IBU": 0,
+      "Max IBU": 0,
+      "Astringency": 0,
+      "Body": 0,
+      "Alcohol": 0,
+      "Bitter": 0,
+      "Sweet": 0,
+      "Sour": 0,
+      "Salty": 0,
+      "Fruits": 0,
+      "Hoppy": 0,
+      "Spices": 0,
+      "Malty": 0,
+      "review_aroma": 0,
+      "review_appearance": 0,
+      "review_palate": 0,
+      "review_taste": 0,
+      "review_overall": 0,
+      "number_of_reviews": 0
+    },
+    "taste_strategy": "No NaNs in source taste columns. Rows with all taste features == 0 treated as missing profile and marked missing_taste_profile / not recommendable. Individual zeros (especially Salty) retained as valid sensory scores.",
+    "abv_strategy": "ABV already numeric. ABV == 0 (or NaN after coercion) flagged abv_suspicious and excluded from recommendation until manually verified/corrected."
+  },
+  "abv": {
+    "min": 0.0,
+    "max": 57.5,
+    "n_abv_suspicious": 12,
+    "n_abv_outlier_gt_20": 3,
+    "outlier_threshold": 20.0,
+    "outlier_action": "Flagged abv_outlier; kept recommendable if taste profile valid."
+  },
+  "serving_size": {
+    "present_in_source": false,
+    "default_serving_ml": 375.0,
+    "serving_ml_applied": 375.0,
+    "alcohol_density_g_per_ml": 0.789,
+    "formula": "alcohol_ml = serving_ml * abv / 100; alcohol_grams = alcohol_ml * 0.789",
+    "per_product_editable_later": true,
+    "primary_constraint": "alcohol_ml",
+    "fallback_constraint": "ABV (only if alcohol_ml missing)",
+    "n_with_serving_ml": 3197,
+    "n_with_alcohol_ml": 3197
+  },
+  "taste_features_for_similarity": [
+    "astringency",
+    "body",
+    "bitter",
+    "sweet",
+    "sour",
+    "salty",
+    "fruits",
+    "hoppy",
+    "spices",
+    "malty"
+  ],
+  "excluded_from_similarity": [
+    "alcohol (sensory mouthfeel column)",
+    "abv",
+    "min_ibu",
+    "max_ibu",
+    "review_*",
+    "number_of_reviews"
+  ],
+  "decision_alcohol_sensory_excluded": true,
+  "exclusions": {
+    "n_missing_taste_profile": 12,
+    "n_abv_suspicious": 12
+  }
+}
