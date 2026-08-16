@@ -1,7 +1,8 @@
 # Render Blueprint — free web service + free Postgres (30-day free DB limit)
 # Deploy: https://dashboard.render.com/blueprint/new?repo=https://github.com/Alex007mi6/Sipmate
 #
-# After first deploy, Render runs initialDeployHook once (seed + product import).
+# Migrations + first-boot seed/import run in docker/entrypoint.sh (free tier
+# does not support preDeployCommand).
 # Free web services sleep after ~15m idle; cold start ~30–60s.
 
 services:
@@ -13,10 +14,6 @@ services:
     dockerfilePath: ./docker/Dockerfile.api
     dockerContext: .
     healthCheckPath: /health
-    preDeployCommand: alembic upgrade head
-    initialDeployHook: |
-      PYTHONPATH=/app/backend python scripts/seed.py &&
-      PYTHONPATH=/app/backend python scripts/import_products.py
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -47,6 +44,8 @@ services:
         generateValue: true
       - key: PYTHONPATH
         value: /app/backend
+      - key: AUTO_BOOTSTRAP
+        value: "true"
 
 databases:
   - name: sipmate-db
