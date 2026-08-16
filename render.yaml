@@ -1,18 +1,22 @@
-# Render Blueprint — free web service + free Postgres
-# https://render.com/docs/blueprint-spec
+# Render Blueprint — free web service + free Postgres (30-day free DB limit)
+# Deploy: https://dashboard.render.com/blueprint/new?repo=https://github.com/Alex007mi6/Sipmate
 #
-# Deploy: push this repo to GitHub, then Render → New → Blueprint → select repo.
-# After first deploy, run one-off shell: alembic upgrade head && python scripts/seed.py
-# and import/train if models/data are not already in the image.
+# After first deploy, Render runs initialDeployHook once (seed + product import).
+# Free web services sleep after ~15m idle; cold start ~30–60s.
 
 services:
   - type: web
     name: sipmate
     runtime: docker
     plan: free
+    region: oregon
     dockerfilePath: ./docker/Dockerfile.api
     dockerContext: .
     healthCheckPath: /health
+    preDeployCommand: alembic upgrade head
+    initialDeployHook: |
+      PYTHONPATH=/app/backend python scripts/seed.py &&
+      PYTHONPATH=/app/backend python scripts/import_products.py
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -29,7 +33,7 @@ services:
       - key: COOKIE_SAMESITE
         value: lax
       - key: CORS_ORIGINS
-        # Update after first deploy to your real https://….onrender.com
+        # Update in dashboard if Render assigns a different subdomain
         value: https://sipmate.onrender.com
       - key: STORAGE_BACKEND
         value: local
