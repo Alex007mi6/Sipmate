@@ -22,10 +22,15 @@ JSONType = sa.JSON().with_variant(postgresql.JSONB(astext_type=sa.Text()), "post
 
 
 def upgrade() -> None:
-    user_role = sa.Enum("user", "admin", name="user_role")
-    model_status = sa.Enum("active", "stale", "archived", "failed", name="model_status")
-    redemption_status = sa.Enum(
-        "pending", "redeemed", "cancelled", name="redemption_status"
+    # create_type=False: create enums once below. Avoid DuplicateObject when
+    # create_table would otherwise emit CREATE TYPE again (common after a
+    # partial failed migrate on Render Postgres).
+    user_role = postgresql.ENUM("user", "admin", name="user_role", create_type=False)
+    model_status = postgresql.ENUM(
+        "active", "stale", "archived", "failed", name="model_status", create_type=False
+    )
+    redemption_status = postgresql.ENUM(
+        "pending", "redeemed", "cancelled", name="redemption_status", create_type=False
     )
     user_role.create(op.get_bind(), checkfirst=True)
     model_status.create(op.get_bind(), checkfirst=True)
