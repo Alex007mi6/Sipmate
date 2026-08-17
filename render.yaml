@@ -1,8 +1,8 @@
-# Render Blueprint — free web service + free Postgres (30-day free DB limit)
+# Render Blueprint — free web service
+# Database: use Neon Free (set DATABASE_URL in Render dashboard; sync: false).
 # Deploy: https://dashboard.render.com/blueprint/new?repo=https://github.com/Alex007mi6/Sipmate
 #
-# Migrations + first-boot seed/import run in docker/entrypoint.sh (free tier
-# does not support preDeployCommand).
+# Migrations + first-boot seed/import run in docker/entrypoint.sh.
 # Free web services sleep after ~15m idle; cold start ~30–60s.
 
 services:
@@ -16,9 +16,8 @@ services:
     healthCheckPath: /health
     envVars:
       - key: DATABASE_URL
-        fromDatabase:
-          name: sipmate-db
-          property: connectionString
+        # Neon connection string — set manually in Render Environment (do not sync from Blueprint)
+        sync: false
       - key: SECRET_KEY
         generateValue: true
       - key: ENVIRONMENT
@@ -30,7 +29,6 @@ services:
       - key: COOKIE_SAMESITE
         value: lax
       - key: CORS_ORIGINS
-        # Update in dashboard if Render assigns a different subdomain
         value: https://sipmate.onrender.com
       - key: STORAGE_BACKEND
         value: local
@@ -47,8 +45,5 @@ services:
       - key: AUTO_BOOTSTRAP
         value: "true"
 
-databases:
-  - name: sipmate-db
-    plan: free
-    databaseName: sipmate
-    user: sipmate
+# Render free Postgres expires after ~30 days; prefer Neon Free for DATABASE_URL.
+# databases: []  # intentionally omitted
