@@ -6,14 +6,14 @@ Deploy configs are ready (`render.yaml`, Docker multi-stage with SPA, Neon-compa
 
 A **public URL is not live yet** until you connect a Git host + free cloud accounts (this machine has no Render/Neon/GitHub CLI login).
 
-## Recommended free stack
+## Recommended free stack (current production)
 
 | Piece | Free option | Role |
 |-------|-------------|------|
-| Open-source DB | **PostgreSQL** on [Neon](https://neon.tech) *or* Render Postgres | Product / points data |
+| Open-source DB | **PostgreSQL** on [Neon](https://neon.tech) Free (no 30-day expiry) | Product / points data |
 | App host | [Render](https://render.com) free Web Service (Docker) | FastAPI + built frontend |
 
-Alternative: Render Blueprint uses **Render Postgres** only (no Neon account).
+Live: `https://sipmate.onrender.com` — `DATABASE_URL` points at Neon (pooled). Render free Postgres is optional and expires ~30 days; prefer Neon.
 
 ## Path A — Render Blueprint (fewest accounts)
 
